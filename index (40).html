@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Food Noise Quiz — Georgie Beames</title>
+  <!-- Meta Pixel -->
+  <script>
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+    document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '2656576624604611');
+    fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=2656576624604611&ev=PageView&noscript=1"/></noscript>
+  <!-- End Meta Pixel -->
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Georgia', serif;
+      background: #faf8f5;
+      color: #1a1a1a;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .container { width: 100%; max-width: 540px; padding: 40px 24px 60px; }
+    .progress-wrap { margin-bottom: 32px; }
+    .progress-label { font-family: sans-serif; font-size: 12px; color: #999; margin-bottom: 8px; text-align: right; }
+    .progress-bar { width: 100%; height: 4px; background: #e8e3db; border-radius: 2px; overflow: hidden; }
+    .progress-fill { height: 100%; background: #e75480; border-radius: 2px; transition: width 0.4s ease; }
+    .screen { display: none; }
+    .screen.active { display: block; }
+    .badge { display: inline-block; font-family: sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #e75480; background: #fde8ef; border-radius: 20px; padding: 5px 14px; margin-bottom: 20px; }
+    h1 { font-size: clamp(26px, 6vw, 36px); line-height: 1.2; color: #1a1a1a; margin-bottom: 18px; }
+    h1 em { font-style: italic; color: #e75480; }
+    .intro-text { font-size: 16px; line-height: 1.7; color: #555; margin-bottom: 32px; font-family: sans-serif; }
+    .btn-primary { display: block; width: 100%; background: #1a1a1a; color: #fff; border: none; border-radius: 8px; padding: 18px 24px; font-size: 16px; font-family: sans-serif; font-weight: 600; cursor: pointer; text-align: center; transition: background 0.2s; }
+    .btn-primary:hover { background: #333; }
+    .question-eyebrow { font-family: sans-serif; font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 12px; }
+    .question-text { font-size: clamp(18px, 4.5vw, 24px); line-height: 1.35; color: #1a1a1a; margin-bottom: 8px; }
+    .question-sub { font-family: sans-serif; font-size: 13px; color: #999; margin-bottom: 28px; }
+    .options { display: flex; flex-direction: column; gap: 10px; }
+    .option-btn { width: 100%; background: #fff; border: 1.5px solid #e0dbd3; border-radius: 10px; padding: 16px 20px; font-size: 15px; font-family: sans-serif; color: #1a1a1a; cursor: pointer; text-align: left; transition: border-color 0.15s, background 0.15s; }
+    .option-btn:hover { border-color: #e75480; background: #fde8ef; }
+    .option-btn.selected { border-color: #e75480; background: #fde8ef; color: #e75480; font-weight: 600; }
+    .insight-card { background: #fff; border: 1px solid #ece8e1; border-left: 4px solid #e75480; border-radius: 10px; padding: 20px; margin: 24px 0; font-family: sans-serif; }
+    .insight-card .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #e75480; margin-bottom: 8px; }
+    .insight-card p { font-size: 14px; line-height: 1.65; color: #555; }
+    /* INTERSTITIAL PANELS */
+    .interstitial-panel { background: #fde8ef; border-radius: 12px; padding: 28px 24px; margin-bottom: 20px; }
+    .interstitial-panel .panel-eyebrow { font-family: sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #e75480; margin-bottom: 12px; }
+    .interstitial-panel p { font-family: sans-serif; font-size: 15px; line-height: 1.7; color: #3a1a24; }
+    .btn-continue { display: block; width: 100%; background: #1a1a1a; color: #fff; border: none; border-radius: 8px; padding: 16px 24px; font-size: 15px; font-family: sans-serif; font-weight: 600; cursor: pointer; margin-top: 8px; transition: background 0.2s; }
+    .btn-continue:hover { background: #333; }
+    .btn-back { background: none; border: none; font-family: sans-serif; font-size: 13px; color: #999; cursor: pointer; padding: 0; margin-bottom: 24px; display: flex; align-items: center; gap: 6px; }
+    .btn-back:hover { color: #555; }
+    .email-heading { font-size: clamp(22px, 5vw, 30px); line-height: 1.25; color: #1a1a1a; margin-bottom: 12px; }
+    .email-sub { font-family: sans-serif; font-size: 15px; color: #666; line-height: 1.6; margin-bottom: 28px; }
+    .input-wrap { margin-bottom: 12px; }
+    input[type="email"] { width: 100%; border: 1.5px solid #e0dbd3; border-radius: 8px; padding: 16px 18px; font-size: 16px; font-family: sans-serif; color: #1a1a1a; background: #fff; outline: none; transition: border-color 0.2s; }
+    input[type="email"]:focus { border-color: #e75480; }
+    .error-msg { font-family: sans-serif; font-size: 13px; color: #c0392b; margin-top: 6px; display: none; }
+    .privacy-note { font-family: sans-serif; font-size: 12px; color: #aaa; text-align: center; margin-top: 12px; }
+    .loading-wrap { text-align: center; padding: 60px 0; }
+    .spinner { width: 40px; height: 40px; border: 3px solid #e8e3db; border-top-color: #e75480; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 20px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-wrap p { font-family: sans-serif; font-size: 15px; color: #999; }
+    .result-badge { display: inline-block; font-family: sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #e75480; background: #fde8ef; border-radius: 20px; padding: 5px 14px; margin-bottom: 16px; }
+    .result-heading { font-size: clamp(22px, 5vw, 30px); line-height: 1.25; color: #1a1a1a; margin-bottom: 16px; }
+    .result-description { font-family: sans-serif; font-size: 15px; line-height: 1.7; color: #555; margin-bottom: 28px; }
+    .product-card { background: #fff; border: 1px solid #ece8e1; border-radius: 12px; padding: 24px; margin-bottom: 16px; }
+    .product-card .product-label { font-family: sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #e75480; margin-bottom: 8px; }
+    .product-card h3 { font-size: 18px; color: #1a1a1a; margin-bottom: 8px; }
+    .product-card p { font-family: sans-serif; font-size: 14px; color: #666; line-height: 1.6; margin-bottom: 16px; }
+    .btn-result { display: block; width: 100%; background: #e75480; color: #fff; border: none; border-radius: 8px; padding: 15px 20px; font-size: 15px; font-family: sans-serif; font-weight: 600; cursor: pointer; text-align: center; text-decoration: none; transition: background 0.2s; }
+    .btn-result:hover { background: #c4325e; }
+    .safeguard { font-family: sans-serif; font-size: 12px; color: #aaa; line-height: 1.6; margin-top: 28px; padding-top: 20px; border-top: 1px solid #ece8e1; }
+    .app-section { margin-top: 32px; padding-top: 28px; border-top: 1px solid #ece8e1; }
+    .app-headline { font-size: clamp(22px, 5vw, 28px); line-height: 1.25; color: #1a1a1a; margin-bottom: 18px; }
+    .app-copy p { font-family: sans-serif; font-size: 15px; line-height: 1.7; color: #555; margin-bottom: 14px; }
+    .app-inclusions { background: #fde8ef; border: 1px solid #f7c9d8; border-radius: 12px; padding: 22px 22px 16px; margin: 22px 0; }
+    .inclusions-intro { font-family: sans-serif; font-size: 14px; font-weight: 700; color: #1a1a1a; margin-bottom: 14px; }
+    .app-inclusions ul { list-style: none; }
+    .app-inclusions li { font-family: sans-serif; font-size: 14px; line-height: 1.6; color: #555; margin-bottom: 12px; padding-left: 26px; position: relative; }
+    .app-inclusions li::before { content: '✓'; position: absolute; left: 0; color: #e75480; font-weight: 700; }
+    .app-closer { font-family: sans-serif; font-size: 15px; line-height: 1.7; color: #1a1a1a; font-weight: 600; margin-bottom: 22px; }
+    .app-screens { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 22px 0; }
+    .app-screens img { width: 100%; height: auto; border-radius: 12px; border: 1px solid #ece8e1; display: block; }
+    @media (max-width: 480px) { .app-screens { grid-template-columns: repeat(2, 1fr); } }
+    .store-buttons { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+    .btn-store { display: inline-flex; align-items: center; gap: 10px; background: #1a1a1a; color: #fff; border-radius: 10px; padding: 10px 18px; text-decoration: none; font-family: sans-serif; text-align: left; transition: background 0.2s; min-width: 160px; }
+    .btn-store:hover { background: #333; }
+    .btn-store small { font-size: 10px; opacity: 0.8; text-transform: uppercase; letter-spacing: 0.04em; }
+    .btn-store span { font-size: 15px; font-weight: 600; line-height: 1.15; }
+    .author-bio { display: flex; align-items: center; gap: 12px; margin-top: 28px; padding-top: 24px; border-top: 1px solid #ece8e1; }
+    .author-bio img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+    .author-name { font-size: 14px; font-weight: 600; font-family: 'Georgia', serif; color: #1a1a1a; }
+    .author-title { font-size: 12px; color: #888; font-family: sans-serif; margin-top: 2px; }
+    @media (max-width: 420px) { .container { padding: 28px 18px 48px; } }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <div class="progress-wrap" id="progressWrap" style="display:none;">
+    <div class="progress-label" id="progressLabel">Question 1 of 10</div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  </div>
+
+  <!-- LANDING -->
+  <div class="screen active" id="screen-landing">
+    <div class="badge">Free Assessment · Takes 2 Mins</div>
+    <h1>Is <em>food noise</em> consuming your mind?</h1>
+    <button class="btn-primary" onclick="startQuiz()" style="margin-bottom:24px;">Start the Assessment →</button>
+    <p class="intro-text">As a Registered Psychologist &amp; Eating Coach, food noise — the constant mental chatter about food — is one of the most exhausting and misunderstood patterns I see. This 2-minute assessment will help you discover which hypnosis audio is best suited to quietening yours.</p>
+    <div class="author-bio">
+      <img src="georgie-photo.jpg" alt="Georgie Beames">
+      <div>
+        <div class="author-name">Georgie Beames</div>
+        <div class="author-title">Registered Psychologist &amp; Coach · 15 Years Experience in Eating &amp; Weight</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="screen" id="screen-q1">
+    <button class="btn-back" onclick="goBack()">← Back</button>
+    <div class="question-eyebrow">Question 1 of 10</div>
+    <p class="question-text">I think about food even when I'm not hungry</p>
+    <div class="options">
+      <button class="option-btn" onclick="answerScale(0, 0)">Never</button>
+      <button class="option-btn" onclick="answerScale(0, 1)">Sometimes</button>
+      <button class="option-btn" onclick="answerScale(0, 2)">Often</button>
+      <button class="option-btn" onclick="answerScale(0, 3)">Always</button>
+    </div>
+  </div>
+
+  <!-- INTERSTITIAL 1 -->
+  <div class="screen" id="screen-inter1">
+    <button class="btn-back" onclick="goBack()">← Back</button>
+    <div class="interstitial-panel">
+      <div class="panel-eyebrow">Did you know?</div>
+      <p>This isn't about hunger. Food noise is a pattern your brain has learned — and like any pattern, it runs on autopilot. Most people spend years trying to think their way out of it. But the loop isn't happening in the part of your brain that responds to logic. It's much deeper than that.</p>
+    </div>
+    <button class="btn-continue" onclick="continueFromInter('screen-inter1', 'screen-q2')">Continue →</button>
+  </div>
+
+  <!-- Q2 -->
+  <div class="screen" id="screen-q2">
+    <button class="btn-back" onclick="goBack()">← Back</button>
+    <div class="question-eyebrow">Question 2 of 10</div>
+    <p class="question-text">Thoughts of food interrupt my focus at work, in conversations, or during activities I enjoy</p>
+    <div class="options">
+      <button class="option-btn" onclick="answerScale(1, 0)">Never</button>
+      <button class="option-btn" onclick="answerScale(1, 1)">Sometimes</button>
+      <button class="option-btn" onclick="answerScale(1, 2)">Often</button>
+      <button class="option-btn" onclick="answerScale(1, 3)">Always</button>
+    </div>
+  </div>
+
+  <!-- INTERSTITIAL 2 -->
+  <div class="screen" id="screen-inter2">
+    <button class="btn-back" onclick="goBack()">← Back</button>
+    <div class="interstitial-panel">
+      <div class="panel-eyebrow">Something worth knowing</div>
+      <p>When food keeps pulling your attention, it's usually not really about food. Your nervous system is looking for something — comfort, stimulation, a way to take the edge off. Food has just become the go-to. That's not a character flaw. It's a learned response. And learned responses can change.</p>
+    </div>
+    <button class="btn-continue" onclick="continueFromInter('screen-inter2', 'screen-q3')">Continue →</button>
+  </div>
+
+  <!-- Q3 -->
+  <div class="screen" id="screen-q3">
+    <button class="btn-back" onclick="goBack()">← Back</button>
+    <div class="question-eyebrow">Question 3 of 10</div>
+    <p class="question-text">I find myself eating not because I'm hungry, but because the thought of food won't go away</p>
+    <div class="options">
+      <button class="option-btn" onclick="answerScale(2, 0)">Never</button>
+      <button class="option-btn" onclick="answerScale(2, 1)">Sometimes</button>
+      <button class="option-btn" onclick="answerScale(2, 2)">Often</button>
+      <button class="option-btn" onclick="answerScale(2, 3)">Always</button>
+    </div>
+  </div>
+
+  <!-- INTERSTITIAL 3 -->
+  <div class="screen" id="screen-inter3">
+    <button class="btn-back" onclick="goBack()">← Back</button>
+    <div class="interstitial-panel">
+      <div class="panel-eyebrow">Did you know?</div>
+      <p>Eating to quiet the noise actually makes sense — it works, at least for a moment. The problem is it reinforces the pattern every single time. So the noise comes back louder. What actually breaks the cycle isn't more willpower. It's working with the part of your mind where the pattern was formed in the first place.</p>
+    </div>
+    <button class="btn-continue" onclick="continueFromInter('screen-inter3', 'screen-q4')">Continue →</button>
+  </div>
+
+  <!-- Q4 -->
+  <div class="screen" id="screen-q4">
+    <button class="btn-back" onclick="goBack()">← Back</button>
+    <div class="question-eyebrow">Question 4 of 10</div>
+    <p class="question-text">I feel like food has power over me</p>
+    <div class="options">
+      <button class="option-btn" onclick="answerScale(3, 0)">Never</button>
+      <button class="option-btn" onclick="answerScale(3, 1)">Sometimes</button>
+      <button class="option-btn" onclick="answerScale(3, 2)">Often</button>
+      <button class="option-btn" onclick="answerScale(3, 3)">Always</button>
+    </div>
+  </div>
+
+  <!-- INTERSTITIAL 4 -->
+  <div class="screen" id="screen-inter4">
+    <button class="btn-back" onclick="goBack()">← Back</button>
+    <div class="interstitial-panel">
+      <div class="panel-eyebrow">Something worth knowing</div>
+      <p>That feeling of food having power over you? It's telling you something important. It means the pattern isn't sitting in your conscious mind where you can just decide to change it. It's running underneath — in your subconscious. That's why no amount of planning or tracking ever quite reaches it. You need a different kind of tool.</p>
+    </div>
+    <button class="btn-continue" onclick="continueFromInter('screen-inter4', 'screen-q5')">Continue →</button>
+  </div>
+
+  <!-- Q5 -->
+  <div class="screen" id="screen-q5">
+    <button class="btn-back" onclick="goBack()">← Back</button>
+    <div class="question-eyebrow">Question 5 of 10</div>
+    <p class="question-text">I mentally plan, negotiate, or argue with myself about food throughout the day</p>
+    <div class="options">
+      <button class="option-btn" onclick="answerScale(4, 0)">Never</button>
+      <button class="option-btn" onclick="answerScale(4, 1)">Sometimes</button>
+      <button class="option-btn" onclick="answerScale(4, 2)">Often</button>
+      <button class="option-btn" onclick="answerScale(4, 3)">Always</button>
+    </div>
+  </div>
+
+  <!-- INTERSTITIAL 5 -->
+  <div class="screen" id="screen-inter5">
+    <button class="btn-back" onclick="goBack()">← Back</button>
+    <div class="interstitial-panel">
+      <div class="panel-eyebrow">Did you know?</div>
+      <p>That constant back-and-forth in your head — "just one," "I'll start Monday," "I've already ruined it" — is genuinely exhausting. And it's using up mental energy you need for everything else in your life. When the food noise quietens, most people are surprised by how much headspace they suddenly have. It's not just about eating. It changes everything.</p>
+    </div>
+    <button class="btn-continue" onclick="continueFromInter('screen-inter5', 'screen-q6')">Continue →</button>
+  </div>
+
+  <!-- Q6 -->
+  <div class="screen" id="screen-q6">
+    <button class="btn-back" onclick="goBack()">← Back</button>
+    <div class="question-eyebrow">Question 6 of 10</div>
+    <p class="question-text">Thoughts of food feel outside of my control — like a loop I can't switch off</p>
+    <div class="options">
+      <button class="option-btn" onclick="answerScale(5, 0)">Never</button>
+      <button class="option-btn" onclick="answerScale(5, 1)">Sometimes</button>
+      <button class="option-btn" onclick="answerScale(5, 2)">Often</button>
+      <button class="option-btn" onclick="answerScale(5, 3)">Always</button>
+    </div>
+  </div>
+
+  <!-- INTERSTITIAL 6 -->
+  <div class="screen" id="screen-inter6">
+    <button class="btn-back" onclick="goBack()">← Back</button>
+    <div class="interstitial-panel">
+      <div class="panel-eyebrow">Something worth knowing</div>
+      <p>That loop feeling is real — and it has nothing to do with willpower or discipline. It's a thought pattern that's been reinforced so many times it runs automatically. The reason it feels impossible to stop is because you're trying to stop it from the outside. Hypnosis works from the inside — at the level where the loop actually starts.</p>
+    </div>
+    <button class="btn-continue" onclick="continueFromInter('screen-inter6', 'screen-q7')">Continue →</button>
+  </div>
+
+  <!-- Q7 -->
+  <div class="screen" id="screen-q7">
+    <button class="btn-back" onclick="goBack()">← Back</button>
+    <div class="question-eyebrow">Question 7 of 10</div>
+    <p class="question-text">Food noise affects my mood, energy, or enjoyment of daily life</p>
+    <div class="options">
+      <button class="option-btn" onclick="answerScale(6, 0)">Never</button>
+      <button class="option-btn" onclick="answerScale(6, 1)">Sometimes</button>
+      <button class="option-btn" onclick="answerScale(6, 2)">Often</button>
+      <button class="option-btn" onclick="answerScale(6, 3)">Always</button>
+    </div>
+  </div>
+
+  <!-- INSIGHT: Hypnosis (existing — unchanged) -->
+  <div class="screen" id="screen-insight1">
+    <button class="btn-back" onclick="goBack()">← Back</button>
+    <p class="question-text">Almost there</p>
+    <p class="question-sub">Have you ever experienced hypnosis designed specifically for you — not a generic recording, but one made with your exact struggles and goals in mind?</p>
+    <div class="options" style="margin-bottom:20px;">
+      <button class="option-btn" onclick="answerInsight1('yes')">Yes</button>
+      <button class="option-btn" onclick="answerInsight1('no')">No</button>
+      <button class="option-btn" onclick="answerInsight1('curious')">I'm curious to try</button>
+    </div>
+    <div class="insight-card">
+      <div class="eyebrow">Did you know?</div>
+      <p>The more personalised the hypnosis, the more effective it can be. Research shows hypnosis works best when suggestions are specific and targeted to the individual — not generic scripts. That's the difference between a recording made for everyone, and one made for you.</p>
+    </div>
+    <p style="font-family:sans-serif;font-size:12px;color:#aaa;line-height:1.6;margin-bottom:16px;">If your relationship with food feels distressing or out of control, please know support is available. In Australia, the Butterfly Foundation National Helpline offers free, confidential help on 1800 33 4673.</p>
+  </div>
+
+  <!-- Q8: ADHD (existing — unchanged) -->
+  <div class="screen" id="screen-q8">
+    <button class="btn-back" onclick="goBack()">← Back</button>
+    <div class="question-eyebrow">Question 8 of 10</div>
+    <p class="question-text">Do you have ADHD or suspect you might?</p>
+    <p class="question-sub">This helps us understand your relationship with food noise</p>
+    <div class="options" style="margin-bottom:20px;">
+      <button class="option-btn" onclick="answerADHD('yes')">Yes, I have a diagnosis</button>
+      <button class="option-btn" onclick="answerADHD('suspect')">Yes, I suspect I might</button>
+      <button class="option-btn" onclick="answerADHD('no')">No</button>
+    </div>
+    <div class="insight-card" id="adhd-insight" style="display:none;">
+      <div class="eyebrow">Something worth knowing</div>
+      <p>Your brain isn't the problem. The approach is. Most approaches to changing your eating ask you to think your way through it. But ADHD makes that harder — your executive function is already working overtime. Hypnosis doesn't ask that of you. It works underneath all of that, at the level of your nervous system, where the real eating patterns live.</p>
+    </div>
+    <button class="btn-continue" id="adhd-continue" style="display:none;" onclick="pushHistory('screen-q8'); showScreen('screen-wls')">Continue →</button>
+  </div>
+
+  <!-- Q9: WEIGHT LOSS SURGERY (unscored — tags only) -->
+  <div class="screen" id="screen-wls">
+    <button class="btn-back" onclick="goBack()">← Back</button>
+    <div class="question-eyebrow">Question 9 of 10</div>
+    <p class="question-text">Have you had weight loss surgery?</p>
+    <p class="question-sub">e.g. gastric sleeve, bypass or band — this doesn't affect your result, it just helps me tailor what I send you</p>
+    <div class="options">
+      <button class="option-btn" onclick="answerWLS('yes')">Yes</button>
+      <button class="option-btn" onclick="answerWLS('considering')">No, but I'm considering it</button>
+      <button class="option-btn" onclick="answerWLS('no')">No</button>
+    </div>
+  </div>
+
+  <!-- INTERSTITIAL WLS — conditional, Yes / Considering only -->
+  <div class="screen" id="screen-inter-wls">
+    <button class="btn-back" onclick="goBack()">← Back</button>
+    <div class="interstitial-panel">
+      <div class="panel-eyebrow">Did you know?</div>
+      <p>Weight loss surgery changes your stomach — but food noise lives in your brain. Surgery restricts how much you can eat. It can't touch the thinking about food — the cravings, the head hunger, the mental chatter. Those come from your brain's reward and stress pathways, which is why so many people notice the noise creeping back 12–18 months after surgery, even when they're doing everything right. The surgery didn't fail, and neither did you. Food noise is a wiring problem — and what's wired in can be rewired.</p>
+    </div>
+    <button class="btn-continue" onclick="continueFromInter('screen-inter-wls', 'screen-q9')">Continue →</button>
+  </div>
+
+  <!-- Q10: GLP1 -->
+  <div class="screen" id="screen-q9">
+    <button class="btn-back" onclick="goBack()">← Back</button>
+    <div class="question-eyebrow">Question 10 of 10</div>
+    <p class="question-text">Are you currently taking weight loss medication?</p>
+    <p class="question-sub">e.g. Ozempic, Wegovy, Mounjaro or similar GLP-1 medication</p>
+    <div class="options">
+      <button class="option-btn" onclick="answerGLP1('yes')">Yes</button>
+      <button class="option-btn" onclick="answerGLP1('no')">No</button>
+    </div>
+  </div>
+
+  <!-- INTERSTITIAL GLP1 — conditional, Yes only -->
+  <div class="screen" id="screen-inter-glp1">
+    <button class="btn-back" onclick="goBack()">← Back</button>
+    <div class="interstitial-panel">
+      <div class="panel-eyebrow">Something worth knowing</div>
+      <p>A lot of people on GLP-1 medication tell me the same thing — the physical hunger is quieter, but the pull toward food is still there. That's because a big part of food noise was never really about hunger. It's about habit, emotion, and patterns that formed long before the medication. The medication does its job. This does a different one.</p>
+    </div>
+    <button class="btn-continue" onclick="continueFromInter('screen-inter-glp1', 'screen-email')">Continue →</button>
+  </div>
+
+  <!-- EMAIL CAPTURE -->
+  <div class="screen" id="screen-email">
+    <button class="btn-back" onclick="goBack()">← Back</button>
+    <h2 class="email-heading">Your results are ready.</h2>
+    <p class="email-sub">Enter your email to see your results — plus get the link to the free Food Cravings App, with free tools you can start using today.</p>
+    <div class="input-wrap">
+      <input type="email" id="emailInput" placeholder="Your email address" autocomplete="email">
+      <div class="error-msg" id="emailError">Please enter a valid email address.</div>
+    </div>
+    <button class="btn-primary" onclick="submitEmail()">See My Results →</button>
+    <p class="privacy-note">By entering your email you'll receive your results and updates from Georgie. Unsubscribe anytime.</p>
+  </div>
+
+  <!-- LOADING -->
+  <div class="screen" id="screen-loading">
+    <div class="loading-wrap">
+      <div class="spinner"></div>
+      <p>Analysing your results…</p>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="screen" id="screen-results">
+    <div class="result-badge">Your Results</div>
+    <h2 class="result-heading" id="result-heading"></h2>
+    <p class="result-description" id="result-description"></p>
+
+    <div class="app-section">
+      <h2 class="app-headline">Stop fighting your cravings — and start understanding them.</h2>
+      <div class="app-copy">
+        <p>You already know what to eat. Kale good. Donuts... less good. (Probably. Maybe. Okay definitely.)</p>
+        <p>But knowing what to eat has never been the problem, has it? Because if it was, you'd have figured this out by now.</p>
+        <p>The real reason you're elbow-deep in a bag of chips at 10pm isn't hunger. And it's not willpower. It's something happening underneath the surface that no meal plan on earth is ever going to fix.</p>
+        <p>That's exactly what my <strong>free Food Cravings App</strong> unpacks for you.</p>
+      </div>
+      <div class="app-inclusions">
+        <p class="inclusions-intro">Here's what you get when you download the free app below:</p>
+        <ul>
+          <li>A <strong>free video series</strong> that digs into the actual root cause behind your eating patterns (not the surface stuff everyone else talks about)</li>
+          <li>A <strong>hypnosis audio taster</strong> that starts rewiring your relationship with food almost immediately</li>
+          <li><strong>Daily interactive check-ins</strong> that help you spot your eating patterns in real time so nothing sneaks up on you</li>
+          <li><strong>5 minute tools</strong> you'll actually use — because who has more time than that?</li>
+        </ul>
+      </div>
+      <div class="app-screens">
+        <img src="images/app-1.jpg" alt="Inside the free Food Cravings App" loading="lazy">
+        <img src="images/app-2.jpg" alt="Inside the free Food Cravings App" loading="lazy">
+        <img src="images/app-3.jpg" alt="Inside the free Food Cravings App" loading="lazy">
+        <img src="images/app-4.jpg" alt="Inside the free Food Cravings App" loading="lazy">
+      </div>
+      <p class="app-closer">This isn't another food plan. It's the missing piece underneath all the food plans you've already tried.</p>
+      <div class="store-buttons">
+        <a href="https://apps.apple.com/us/app/food-cravings-app/id1640037342" class="btn-store" id="btn-apple" onclick="trackAppClick('apple')">
+          <svg viewBox="0 0 384 512" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zM255.5 105.1c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg>
+          <span><small>Download on the</small><br>App Store</span>
+        </a>
+        <a href="https://play.google.com/store/apps/details?id=com.phfn5u6sqg9w.pa4cyq9xhoapp" class="btn-store" id="btn-google" onclick="trackAppClick('google')">
+          <svg viewBox="0 0 512 512" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l280.8-161.2-60.1-60.1L104.6 499z"/></svg>
+          <span><small>Get it on</small><br>Google Play</span>
+        </a>
+      </div>
+    </div>
+    <div class="safeguard">
+      If your relationship with food feels distressing or out of control, please know support is available. In Australia, the Butterfly Foundation National Helpline offers free, confidential help on <strong>1800 33 4673</strong>.
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const state = {
+    scaleScores: [],
+    adhdStatus: null,
+    wls: null,
+    glp1: null,
+    email: '',
+    history: [],
+    currentScreen: 'screen-landing'
+  };
+
+  const TOTAL_QUESTIONS = 10;
+
+  function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    state.currentScreen = id;
+    window.scrollTo(0, 0);
+    updateProgress(id);
+  }
+
+  function pushHistory(from) { state.history.push(from); }
+
+  function goBack() {
+    if (state.history.length === 0) return;
+    const prev = state.history.pop();
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(prev).classList.add('active');
+    state.currentScreen = prev;
+    window.scrollTo(0, 0);
+    updateProgress(prev);
+  }
+
+  function updateProgress(screenId) {
+    const progressWrap = document.getElementById('progressWrap');
+    const progressFill = document.getElementById('progressFill');
+    const progressLabel = document.getElementById('progressLabel');
+
+    const questionMap = {
+      'screen-q1': 1, 'screen-inter1': 1,
+      'screen-q2': 2, 'screen-inter2': 2,
+      'screen-q3': 3, 'screen-inter3': 3,
+      'screen-q4': 4, 'screen-inter4': 4,
+      'screen-q5': 5, 'screen-inter5': 5,
+      'screen-q6': 6, 'screen-inter6': 6,
+      'screen-q7': 7, 'screen-insight1': 7.5,
+      'screen-q8': 8,
+      'screen-wls': 9, 'screen-inter-wls': 9,
+      'screen-q9': 10, 'screen-inter-glp1': 10,
+      'screen-email': 10, 'screen-loading': 10, 'screen-results': 10
+    };
+
+    if (screenId === 'screen-landing') { progressWrap.style.display = 'none'; return; }
+
+    progressWrap.style.display = 'block';
+    const step = questionMap[screenId] || 0;
+    const pct = Math.min((step / TOTAL_QUESTIONS) * 100, 100);
+    progressFill.style.width = pct + '%';
+
+    if (['screen-email','screen-loading','screen-results'].includes(screenId)) {
+      progressLabel.textContent = 'Almost done!';
+    } else if (screenId === 'screen-insight1') {
+      progressLabel.textContent = 'Almost there…';
+    } else {
+      const qNum = questionMap[screenId];
+      if (qNum && Number.isInteger(qNum)) progressLabel.textContent = `Question ${qNum} of ${TOTAL_QUESTIONS}`;
+    }
+  }
+
+  function startQuiz() {
+    pushHistory('screen-landing');
+    showScreen('screen-q1');
+  }
+
+  const scaleScreens = ['screen-q1','screen-q2','screen-q3','screen-q4','screen-q5','screen-q6','screen-q7'];
+  const interScreens = ['screen-inter1','screen-inter2','screen-inter3','screen-inter4','screen-inter5','screen-inter6',null];
+  const afterInters  = ['screen-q2','screen-q3','screen-q4','screen-q5','screen-q6','screen-q7','screen-insight1'];
+
+  function answerScale(index, value) {
+    state.scaleScores[index] = value;
+    const btns = document.querySelectorAll('#' + scaleScreens[index] + ' .option-btn');
+    btns.forEach((b, i) => b.classList.toggle('selected', i === value));
+    setTimeout(() => {
+      pushHistory(scaleScreens[index]);
+      const inter = interScreens[index];
+      showScreen(inter ? inter : afterInters[index]);
+    }, 220);
+  }
+
+  function continueFromInter(fromScreen, toScreen) {
+    pushHistory(fromScreen);
+    showScreen(toScreen);
+  }
+
+  function answerInsight1(val) {
+    pushHistory('screen-insight1');
+    showScreen('screen-q8');
+  }
+
+  function answerADHD(val) {
+    state.adhdStatus = val;
+    const insight = document.getElementById('adhd-insight');
+    const cont = document.getElementById('adhd-continue');
+    if (val === 'yes' || val === 'suspect') {
+      insight.style.display = 'block';
+      cont.style.display = 'block';
+    } else {
+      insight.style.display = 'none';
+      cont.style.display = 'none';
+      pushHistory('screen-q8');
+      showScreen('screen-wls');
+    }
+  }
+
+  function answerWLS(val) {
+    state.wls = val;
+    pushHistory('screen-wls');
+    showScreen(val === 'no' ? 'screen-q9' : 'screen-inter-wls');
+  }
+
+  function answerGLP1(val) {
+    state.glp1 = val;
+    pushHistory('screen-q9');
+    showScreen(val === 'yes' ? 'screen-inter-glp1' : 'screen-email');
+  }
+
+  function submitEmail() {
+    const input = document.getElementById('emailInput');
+    const error = document.getElementById('emailError');
+    const email = input.value.trim();
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      error.style.display = 'block';
+      input.focus();
+      return;
+    }
+    error.style.display = 'none';
+    state.email = email;
+    pushHistory('screen-email');
+    showScreen('screen-loading');
+    if (typeof fbq !== 'undefined') fbq('track', 'Lead', { content_name: 'food-noise-quiz-app' });
+    subscribeAndShowResults();
+  }
+
+  async function subscribeAndShowResults() {
+    const { segment, band } = getAudienceData();
+    try {
+      await fetch('/.netlify/functions/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: state.email, segment, wls: state.wls })
+      });
+    } catch(e) { console.error('Subscribe error:', e); }
+    setTimeout(() => {
+      if (typeof fbq !== 'undefined') fbq('trackCustom', 'AppQuizComplete', { segment });
+      showResults(band);
+    }, 1800);
+  }
+
+  function trackAppClick(store) {
+    if (typeof fbq !== 'undefined') fbq('trackCustom', 'AppDownloadClick', { store });
+  }
+
+  function getAudienceData() {
+    const total = state.scaleScores.reduce((a, b) => a + b, 0);
+    const pct = total / (7 * 3);
+    let band = pct < 0.4 ? 'mild' : pct < 0.7 ? 'moderate' : 'severe';
+    const adhd = state.adhdStatus === 'yes' || state.adhdStatus === 'suspect';
+    const glp1 = state.glp1 === 'yes';
+    let segment;
+    if (adhd) segment = `${band} adhd`;
+    else if (glp1) segment = `${band} glp1`;
+    else segment = `${band} general`;
+    return { segment, band, adhd, glp1 };
+  }
+
+  function showResults(band) {
+    const { adhd, glp1 } = getAudienceData();
+    let heading, description;
+    if (adhd) {
+      heading = 'Your food noise is deeply connected to how your ADHD brain is wired.';
+      description = 'ADHD brains are dopamine-seeking by nature — and food is one of the fastest dopamine hits available. Your results suggest your food noise isn\'t a lack of willpower. It\'s a nervous system pattern — and the free tools below are built for exactly this.';
+    } else if (glp1) {
+      heading = 'Your food noise is being driven by more than medication.';
+      description = 'GLP-1 medications quieten physical hunger — but they don\'t touch the mental noise. Your medication handles the body. The free tools below are for the mind.';
+    } else if (band === 'mild') {
+      heading = 'Your food noise is present — but you have more control than you think.';
+      description = 'Your results show mild food noise. With the right support, this is very manageable. The free tools below can help quiet that mental chatter before it escalates.';
+    } else if (band === 'moderate') {
+      heading = 'Your food noise is taking up real mental space every day.';
+      description = 'Your results show moderate food noise — the kind that interrupts your focus, affects your mood, and follows you through the day. The free tools below are a place to start. Today.';
+    } else {
+      heading = 'Your food noise is loud, constant, and exhausting — and it\'s not your fault.';
+      description = 'Your results show high food noise. The loop you\'re living in is a nervous system pattern, not a character flaw. The free tools below work with that pattern — not against you.';
+    }
+    document.getElementById('result-heading').textContent = heading;
+    document.getElementById('result-description').textContent = description;
+    // Put the visitor's own app store first
+    if (/android/i.test(navigator.userAgent)) {
+      const wrap = document.querySelector('.store-buttons');
+      wrap.insertBefore(document.getElementById('btn-google'), document.getElementById('btn-apple'));
+    }
+    showScreen('screen-results');
+  }
+</script>
+</body>
+</html>
